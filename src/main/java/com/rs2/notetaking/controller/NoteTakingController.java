@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rs2.notetaking.dto.LabelFilterDTO;
 import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
 import com.rs2.notetaking.dto.NoteSearchDetailsDTO;
@@ -50,13 +51,22 @@ public class NoteTakingController {
         noteService.deleteNote(id);
     }
 
+    @PostMapping("/search")
+    public List<NoteSearchDetailsDTO> search(@RequestBody SearchDTO search) {
+        return noteService.filterNotes(search.getText().toLowerCase());
+    }
+
+    @PostMapping("/filter")
+    public List<NoteLabelId> labelFilter(@RequestBody LabelFilterDTO labelFilter) {
+        return noteService.filterLabels(labelFilter);
+    }
+ 
+    /**
+     * TODO: Ideally this is in the label controller
+     */
     @GetMapping("/label")
     public List<Label> getAllLabels() {
         return noteService.getAllLabels();
     }
 
-    @PostMapping("/search")
-    public List<NoteSearchDetailsDTO> search(@RequestBody SearchDTO search) {
-        return noteService.filterNotes(search.getText().toLowerCase());
-    }
 }

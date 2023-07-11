@@ -1,5 +1,6 @@
 package com.rs2.notetaking.service;
 
+import com.rs2.notetaking.dto.LabelFilterDTO;
 import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
 import com.rs2.notetaking.dto.NoteSearchDetailsDTO;
@@ -21,6 +22,8 @@ public interface NoteTakingService {
 
     // Ideally implement this in the Label Service
     List<Label> getAllLabels();
+
+    List<NoteLabelId> filterLabels(LabelFilterDTO labelFilter);
 
     List<NoteSearchDetailsDTO> filterNotes(String filter);
 }

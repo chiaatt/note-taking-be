@@ -1,5 +1,6 @@
 package com.rs2.notetaking.service;
 
+import com.rs2.notetaking.dto.LabelFilterDTO;
 import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
 import com.rs2.notetaking.dto.NoteSearchDetailsDTO;
@@ -218,7 +219,7 @@ public class NoteTakingServiceImpl implements NoteTakingService {
     }
 
     private void filterLabels(String text, List<NoteSearchDetailsDTO> searchList) {
-        List<NoteLabel> filterLabels = noteLabelRepo.filter(text);
+        List<NoteLabel> filterLabels = noteLabelRepo.filterByLabelName(text);
 
         filterLabels.forEach((noteLabel) -> {
             NoteLabelId noteLabelId = noteLabel.getId();
@@ -249,5 +250,16 @@ public class NoteTakingServiceImpl implements NoteTakingService {
                         noteLabel.getLabel().getName(), noteLabel.getLabel().getId()));
             }
         });
+    }
+
+    @Override
+    public List<NoteLabelId> filterLabels(LabelFilterDTO labelFilter) {
+        List<NoteLabel> filterByLabelIds = noteLabelRepo.filterByLabelIds(labelFilter.getLabels());
+        List<NoteLabelId> result = new ArrayList<>();
+
+        filterByLabelIds.forEach((noteLabel) -> {
+            result.add(noteLabel.getId());
+        });
+        return result;
     }
 }
