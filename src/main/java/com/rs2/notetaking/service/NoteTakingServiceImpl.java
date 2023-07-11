@@ -1,5 +1,5 @@
 package com.rs2.notetaking.service;
-import com.rs2.notetaking.dto.NoteDTO;
+import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
 import com.rs2.notetaking.dto.NoteUpdateDTO;
 import com.rs2.notetaking.entity.Label;
@@ -11,6 +11,7 @@ import com.rs2.notetaking.repo.NoteLabelRepo;
 import com.rs2.notetaking.repo.NoteRepo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class NoteTakingServiceImpl implements NoteTakingService
      * 
      */
     @Override
-    public String addNote(NoteSaveDTO noteSaveDto)
+    public NoteDetailsDTO addNote(NoteSaveDTO noteSaveDto)
     {
         Note note = new Note(
             noteSaveDto.getTitle(),
@@ -44,79 +45,81 @@ public class NoteTakingServiceImpl implements NoteTakingService
 
         noteRepo.save(note);
         
-        Label label;
-        // If the label name is provided
-        if (!noteSaveDto.getLabelName().isEmpty()) {
+        // If the label name is not provided
+        if (noteSaveDto.getLabelName().isEmpty()) {
+            return new NoteDetailsDTO(note.getId(), note.getTitle(), note.getContent(), null);
+        } 
 
-            // Lookup label
-            List<Label> labels = labelRepo.findByName(noteSaveDto.getLabelName());
+        Label label = createLabel(noteSaveDto.getLabelName());
 
-            // If the label already exists
-           if (labels.size() > 0) {
-                // Get the first one - assuming the label names are unique so the size of the list is going to always be one.
-                label = labels.get(0);
-           }
-            else {
-                // Create new label
-                label = new Label(noteSaveDto.getLabelName());
-                labelRepo.save(label);
-            }
-        
-            // Save link between label & note
-            NoteLabelId noteLabelId = new NoteLabelId();
-            noteLabelId.setLabelId(label);
-            noteLabelId.setNoteId(note);
+        createNewNoteLabel(note, label);
 
-            NoteLabel noteLabel = new NoteLabel(noteLabelId);
-
-            noteLabelRepo.save(noteLabel);
-        }
-
-        return note.getTitle();
+        return new NoteDetailsDTO(note.getId(), note.getTitle(), note.getContent(), label.getName());
+    
     }
  
+    /**
+     * Get all notes.
+     */
     @Override
-    public List<NoteDTO> getAllNotes() {
-    //    List<Note> getemployees = noteRepo.findAll();
-    //    List<NoteDTO> employeeDTOList = new ArrayList<>();
-    //    for(Note note:getNotes)
-    //    {
-    //         NoteDTO employeeDTO = new NoteDTO(
- 
-    //                note.get,
-    //                note.getEmployeename(),
-    //                note.getEmployeeaddress(),
-    //                note.getMobile()
-    //        );
-    //        employeeDTOList.add(employeeDTO);
-    //    }
- 
-    //    return  employeeDTOList;
-    return null;
+    public List<NoteLabel> getAllNotes() {
+        List<NoteLabel> allNotesWithLabel = noteLabelRepo.findAll();
+
+        return allNotesWithLabel;
     }
  
+    /**
+     * Update an existing note
+     * 
+     * Assuming: One note is
+     */
     @Override
-    public String updateNote(NoteUpdateDTO employeeUpdateDTO)
+    public Optional<NoteDetailsDTO> updateNote(NoteUpdateDTO noteUpdateDTO)
     {
-        // if (employeeRepo.existsById(employeeUpdateDTO.getEmployeeid())) {
-        //     Employee employee = employeeRepo.getById(employeeUpdateDTO.getEmployeeid());
- 
- 
-        //     employee.setEmployeename(employeeUpdateDTO.getEmployeename());
-        //     employee.setEmployeeaddress(employeeUpdateDTO.getEmployeeaddress());
-        //     employee.setMobile(employeeUpdateDTO.getMobile());
-        //     employeeRepo.save(employee);
-        // }
-        //     else
-        //     {
-        //         System.out.println("Employee ID do not Exist");
-        //     }
- 
-        //         return null;
-
-        return null;
+        Optional<Note> note = noteRepo.findById(noteUpdateDTO.getNoteId());
+        
+        if (!note.isPresent()) {
+            //TODO: Return exception to notify the consumer of the API that the note id is invalid.
+            return null;
         }
- 
+
+        // Update Note
+        Note noteDetails = note.get();
+        noteDetails.setTitle(noteUpdateDTO.getTitle());
+        noteDetails.setContent(noteUpdateDTO.getContent());
+        noteRepo.save(noteDetails);
+
+        // If the label name is not provided
+        if (noteUpdateDTO.getLabelName().isEmpty()) {
+            // If the note to be updated have a label linked to it - need to remove it
+            List<NoteLabel> noteLabel = noteLabelRepo.findByIdNoteId(noteDetails);
+            noteLabelRepo.deleteAll(noteLabel);
+
+            return Optional.ofNullable(new NoteDetailsDTO(noteDetails.getId(), noteDetails.getTitle(), noteDetails.getContent(), null));
+        } 
+
+        // Update/Create Label
+        Label label = createLabel(noteUpdateDTO.getLabelName());
+
+        // Save link between label & note
+        // If the note to be updated have a label linked to it - just update
+        List<NoteLabel> noteLabel = noteLabelRepo.findByIdNoteId(noteDetails);
+
+        // If the note label link is not found
+        if (noteLabel.isEmpty()) {
+            // Create new note label
+            createNewNoteLabel(noteDetails, label);
+            return Optional.ofNullable(new NoteDetailsDTO(noteDetails.getId(), noteDetails.getTitle(), noteDetails.getContent(), label.getName()));
+
+        } else {
+            noteLabelRepo.deleteAll(noteLabel);
+            createNewNoteLabel(noteDetails, label);
+
+            return Optional.ofNullable(new NoteDetailsDTO(noteDetails.getId(), noteDetails.getTitle(), noteDetails.getContent(), label.getName()));
+        }       
+    }
+
+
     @Override
     public boolean deleteNote(int id) {
  
@@ -131,5 +134,34 @@ public class NoteTakingServiceImpl implements NoteTakingService
  
         // return true;
         return true;
+    }
+
+    private Label createLabel(String labelName) {
+        Label label;
+
+        List<Label> labels = labelRepo.findByName(labelName);
+
+        // If the label already exists
+        if (labels.size() > 0) {
+            // Get the first one - assuming the label names are unique so the size of the list is going to always be one.
+            label = labels.get(0);
+        }
+        else {
+            // Create new label
+            label = new Label(labelName);
+            labelRepo.save(label);
+        }
+      
+        return label;
+    }
+
+    private void createNewNoteLabel(Note note, Label label) {
+        NoteLabelId noteLabelId = new NoteLabelId();
+        noteLabelId.setLabelId(label);
+        noteLabelId.setNoteId(note);
+
+        NoteLabel newNoteLabel = new NoteLabel(noteLabelId);
+
+        noteLabelRepo.save(newNoteLabel);
     }
 }

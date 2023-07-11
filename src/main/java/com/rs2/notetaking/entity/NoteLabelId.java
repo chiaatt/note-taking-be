@@ -16,5 +16,8 @@ public class NoteLabelId implements Serializable {
     @ManyToOne(optional = false) 
     @JoinColumn(name = "labelid", nullable = false)
     private Label labelId;
- 
+
+    public NoteLabelId() {
+    }
+    
 }

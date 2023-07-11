@@ -1,5 +1,8 @@
 package com.rs2.notetaking.dto;
 
+import lombok.Data;
+
+@Data
 public class NoteSaveDTO {
 
     private String title;
@@ -17,31 +20,5 @@ public class NoteSaveDTO {
         this.content = content;
     }
 
-    public NoteSaveDTO() {
-    }
-
-    public String getTitle() {
-        return title;
-    }
- 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
- 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getLabelName() {
-        return labelName;
-    }
- 
-    public void setLabelName(String labelName) {
-        this.labelName = labelName;
-    }
-
+    public NoteSaveDTO() {}
 }

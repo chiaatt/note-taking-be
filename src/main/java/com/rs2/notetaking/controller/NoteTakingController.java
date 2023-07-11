@@ -1,6 +1,7 @@
 package com.rs2.notetaking.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rs2.notetaking.dto.NoteDTO;
+import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
 import com.rs2.notetaking.dto.NoteUpdateDTO;
+import com.rs2.notetaking.entity.NoteLabel;
 import com.rs2.notetaking.service.NoteTakingService;
 
 @RestController
@@ -27,24 +29,22 @@ public class NoteTakingController {
 
     @PostMapping()
 
-    public String saveNote(@RequestBody NoteSaveDTO noteSaveDto)
+    public NoteDetailsDTO saveNote(@RequestBody NoteSaveDTO noteSaveDto)
     {
-        String id = noteService.addNote(noteSaveDto);
-        return id;
+        return noteService.addNote(noteSaveDto);
     }
 
     @GetMapping()
-    public List<NoteDTO> getAllNotes()
+    public List<NoteLabel> getAllNotes()
     {
-       List<NoteDTO> allEmployees = noteService.getAllNotes();
+       List<NoteLabel> allEmployees = noteService.getAllNotes();
        return allEmployees;
     }
 
     @PutMapping()
-    public String updateNote(@RequestBody NoteUpdateDTO noteUpdateDTO)
+    public Optional<NoteDetailsDTO> updateNote(@RequestBody NoteUpdateDTO noteUpdateDTO)
     {
-        String id = noteService.updateNote(noteUpdateDTO);
-        return id;
+        return noteService.updateNote(noteUpdateDTO);
     }
 
     @DeleteMapping(path = "/{id}")

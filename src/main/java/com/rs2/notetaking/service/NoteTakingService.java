@@ -1,17 +1,19 @@
 package com.rs2.notetaking.service;
 
-import com.rs2.notetaking.dto.NoteDTO;
+import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
 import com.rs2.notetaking.dto.NoteUpdateDTO;
+import com.rs2.notetaking.entity.NoteLabel;
 
 import java.util.List;
+import java.util.Optional;
  
 public interface NoteTakingService {
-    String addNote(NoteSaveDTO noteSaveDto);
+    NoteDetailsDTO addNote(NoteSaveDTO noteSaveDto);
  
-    List<NoteDTO> getAllNotes();
+    List<NoteLabel> getAllNotes();
  
-    String updateNote(NoteUpdateDTO noteUpdateDto);
+    Optional<NoteDetailsDTO> updateNote(NoteUpdateDTO noteUpdateDto);
  
     boolean deleteNote(int id);
 }
