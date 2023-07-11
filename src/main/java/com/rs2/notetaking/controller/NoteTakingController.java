@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
+import com.rs2.notetaking.dto.NoteSearchDetailsDTO;
 import com.rs2.notetaking.dto.NoteUpdateDTO;
+import com.rs2.notetaking.dto.SearchDTO;
 import com.rs2.notetaking.entity.Label;
 import com.rs2.notetaking.entity.NoteLabelId;
 import com.rs2.notetaking.service.NoteTakingService;
@@ -25,37 +27,36 @@ import com.rs2.notetaking.service.NoteTakingService;
 @CrossOrigin
 @RequestMapping("api/v1/note")
 public class NoteTakingController {
-     @Autowired
+    @Autowired
     private NoteTakingService noteService;
 
     @PostMapping()
-
-    public NoteDetailsDTO saveNote(@RequestBody NoteSaveDTO noteSaveDto)
-    {
+    public NoteDetailsDTO saveNote(@RequestBody NoteSaveDTO noteSaveDto) {
         return noteService.addNote(noteSaveDto);
     }
 
     @GetMapping()
-    public List<NoteLabelId> getAllNotes()
-    {
-       return noteService.getAllNotes();
+    public List<NoteLabelId> getAllNotes() {
+        return noteService.getAllNotes();
     }
 
     @PutMapping()
-    public Optional<NoteDetailsDTO> updateNote(@RequestBody NoteUpdateDTO noteUpdateDTO)
-    {
+    public Optional<NoteDetailsDTO> updateNote(@RequestBody NoteUpdateDTO noteUpdateDTO) {
         return noteService.updateNote(noteUpdateDTO);
     }
 
     @DeleteMapping(path = "/{id}")
-    public void deleteNote(@PathVariable(value = "id") int id)
-    {
+    public void deleteNote(@PathVariable(value = "id") int id) {
         noteService.deleteNote(id);
-    }   
+    }
 
     @GetMapping("/label")
-    public List<Label> getAllLabels()
-    {
-       return noteService.getAllLabels();
+    public List<Label> getAllLabels() {
+        return noteService.getAllLabels();
+    }
+
+    @PostMapping("/search")
+    public List<NoteSearchDetailsDTO> search(@RequestBody SearchDTO search) {
+        return noteService.filterNotes(search.getText().toLowerCase());
     }
 }

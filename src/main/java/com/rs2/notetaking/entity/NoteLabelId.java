@@ -11,11 +11,11 @@ public class NoteLabelId implements Serializable {
  
     @ManyToOne(optional = false) 
     @JoinColumn(name = "noteid" , nullable = false)
-    private Note noteId;
+    private Note note;
 
     @ManyToOne(optional = false) 
     @JoinColumn(name = "labelid", nullable = false)
-    private Label labelId;
+    private Label label;
 
     public NoteLabelId() {
     }

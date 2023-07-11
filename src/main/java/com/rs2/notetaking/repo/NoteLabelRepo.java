@@ -7,6 +7,7 @@ import com.rs2.notetaking.entity.NoteLabelId;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NoteLabelRepo extends JpaRepository<NoteLabel, NoteLabelId> {
      List<NoteLabel> findAll();
-     List<NoteLabel> findByIdNoteId(Note note);
-     List<NoteLabel> findByIdLabelId(Label label);
+     List<NoteLabel> findByIdNote(Note note);
+     List<NoteLabel> findByIdLabel(Label label);
+
+    // In this case we want the notes that have a label which matches the filter
+    @Query(value = "SELECT nl.* FROM \"note-label\" nl INNER JOIN label n on nl.labelid = n.id WHERE lower(n.name) LIKE %?1%", nativeQuery = true)
+    List<NoteLabel> filter(String filter);
 }
