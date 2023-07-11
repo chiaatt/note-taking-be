@@ -1,4 +1,5 @@
 package com.rs2.notetaking.service;
+
 import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
 import com.rs2.notetaking.dto.NoteUpdateDTO;

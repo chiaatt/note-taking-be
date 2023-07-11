@@ -1,6 +1,5 @@
 package com.rs2.notetaking.entity;
 
-import java.math.BigDecimal;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,7 +10,7 @@ public class Label {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private BigDecimal id;
+    private int id;
  
     @Column(name = "name", length = 32, nullable = false)
     private String name;

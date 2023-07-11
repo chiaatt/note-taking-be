@@ -12,7 +12,7 @@ public class Note {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private BigDecimal id;
+    private int id;
  
     @Column(name = "title", length = 32, nullable = false)
     private String title;

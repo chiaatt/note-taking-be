@@ -18,7 +18,6 @@ import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
 import com.rs2.notetaking.dto.NoteUpdateDTO;
 import com.rs2.notetaking.entity.Label;
-import com.rs2.notetaking.entity.NoteLabel;
 import com.rs2.notetaking.entity.NoteLabelId;
 import com.rs2.notetaking.service.NoteTakingService;
 
