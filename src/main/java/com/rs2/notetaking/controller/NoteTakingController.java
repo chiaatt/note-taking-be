@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
 import com.rs2.notetaking.dto.NoteUpdateDTO;
+import com.rs2.notetaking.entity.Label;
 import com.rs2.notetaking.entity.NoteLabel;
+import com.rs2.notetaking.entity.NoteLabelId;
 import com.rs2.notetaking.service.NoteTakingService;
 
 @RestController
@@ -35,10 +37,9 @@ public class NoteTakingController {
     }
 
     @GetMapping()
-    public List<NoteLabel> getAllNotes()
+    public List<NoteLabelId> getAllNotes()
     {
-       List<NoteLabel> allEmployees = noteService.getAllNotes();
-       return allEmployees;
+       return noteService.getAllNotes();
     }
 
     @PutMapping()
@@ -52,4 +53,10 @@ public class NoteTakingController {
     {
         noteService.deleteNote(id);
     }   
+
+    @GetMapping("/label")
+    public List<Label> getAllLabels()
+    {
+       return noteService.getAllLabels();
+    }
 }

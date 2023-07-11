@@ -10,6 +10,7 @@ import com.rs2.notetaking.repo.LabelRepo;
 import com.rs2.notetaking.repo.NoteLabelRepo;
 import com.rs2.notetaking.repo.NoteRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,10 +63,15 @@ public class NoteTakingServiceImpl implements NoteTakingService
      * Get all notes.
      */
     @Override
-    public List<NoteLabel> getAllNotes() {
+    public List<NoteLabelId> getAllNotes() {
         List<NoteLabel> allNotesWithLabel = noteLabelRepo.findAll();
+        List<NoteLabelId> result = new ArrayList<>();
 
-        return allNotesWithLabel;
+        allNotesWithLabel.forEach((noteLabel) -> {
+             result.add(noteLabel.getId());
+        });
+
+        return result;
     }
  
     /**
@@ -150,6 +156,12 @@ public class NoteTakingServiceImpl implements NoteTakingService
         }
  
         return true;
+    }
+
+
+     @Override
+    public List<Label> getAllLabels() {
+        return labelRepo.findAll();
     }
 
     private Label createLabel(String labelName) {
