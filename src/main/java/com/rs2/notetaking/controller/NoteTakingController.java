@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rs2.notetaking.dto.LabelFilterDTO;
 import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
-import com.rs2.notetaking.dto.NoteSearchDetailsDTO;
 import com.rs2.notetaking.dto.NoteUpdateDTO;
 import com.rs2.notetaking.dto.SearchDTO;
 import com.rs2.notetaking.entity.Label;
@@ -37,7 +36,7 @@ public class NoteTakingController {
     }
 
     @GetMapping()
-    public List<NoteLabelId> getAllNotes() {
+    public List<NoteDetailsDTO> getAllNotes() {
         return noteService.getAllNotes();
     }
 
@@ -52,7 +51,7 @@ public class NoteTakingController {
     }
 
     @PostMapping("/search")
-    public List<NoteSearchDetailsDTO> search(@RequestBody SearchDTO search) {
+    public List<NoteDetailsDTO> search(@RequestBody SearchDTO search) {
         return noteService.filterNotes(search.getText().toLowerCase());
     }
 

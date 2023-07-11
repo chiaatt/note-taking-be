@@ -3,7 +3,6 @@ package com.rs2.notetaking.service;
 import com.rs2.notetaking.dto.LabelFilterDTO;
 import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
-import com.rs2.notetaking.dto.NoteSearchDetailsDTO;
 import com.rs2.notetaking.dto.NoteUpdateDTO;
 import com.rs2.notetaking.entity.Label;
 import com.rs2.notetaking.entity.NoteLabelId;
@@ -14,7 +13,7 @@ import java.util.Optional;
 public interface NoteTakingService {
     NoteDetailsDTO addNote(NoteSaveDTO noteSaveDto);
  
-    List<NoteLabelId> getAllNotes();
+    List<NoteDetailsDTO> getAllNotes();
  
     Optional<NoteDetailsDTO> updateNote(NoteUpdateDTO noteUpdateDto);
  
@@ -25,5 +24,5 @@ public interface NoteTakingService {
 
     List<NoteLabelId> filterLabels(LabelFilterDTO labelFilter);
 
-    List<NoteSearchDetailsDTO> filterNotes(String filter);
+    List<NoteDetailsDTO> filterNotes(String filter);
 }

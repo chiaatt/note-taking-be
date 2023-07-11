@@ -3,7 +3,6 @@ package com.rs2.notetaking.repo;
 import com.rs2.notetaking.entity.Note;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

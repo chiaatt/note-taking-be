@@ -1,5 +1,9 @@
 package com.rs2.notetaking.dto;
 
+import java.util.List;
+
+import com.rs2.notetaking.entity.Label;
+
 import lombok.Data;
 
 @Data
@@ -8,23 +12,12 @@ public class NoteDetailsDTO {
     private int noteId;
     private String title;
     private String content;
-    private String labelName = "";
-    public String labelId = "";
+    public List<Label> labels;
 
-    public NoteDetailsDTO(int noteId, String title, String content, String labelName) {
+    public NoteDetailsDTO(int noteId, String title, String content, List<Label> labels) {
         this.noteId = noteId;
         this.title = title;
         this.content = content;
-        this.labelName = labelName;
+        this.labels = labels;
     }
-
-
-    public NoteDetailsDTO(int noteId, String title, String content, String labelName, String labelId) {
-        this.noteId = noteId;
-        this.title = title;
-        this.content = content;
-        this.labelName = labelName;
-        this.labelId = labelId;
-    }
-   
 }

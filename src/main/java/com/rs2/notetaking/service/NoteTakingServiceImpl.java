@@ -3,7 +3,6 @@ package com.rs2.notetaking.service;
 import com.rs2.notetaking.dto.LabelFilterDTO;
 import com.rs2.notetaking.dto.NoteDetailsDTO;
 import com.rs2.notetaking.dto.NoteSaveDTO;
-import com.rs2.notetaking.dto.NoteSearchDetailsDTO;
 import com.rs2.notetaking.dto.NoteUpdateDTO;
 import com.rs2.notetaking.entity.Label;
 import com.rs2.notetaking.entity.Note;
@@ -48,15 +47,15 @@ public class NoteTakingServiceImpl implements NoteTakingService {
         noteRepo.save(note);
 
         // If the label name is not provided
-        if (noteSaveDto.getLabelName().isEmpty()) {
+        if (noteSaveDto.getLabels().isEmpty()) {
             return new NoteDetailsDTO(note.getId(), note.getTitle(), note.getContent(), null);
         }
 
-        Label label = createLabel(noteSaveDto.getLabelName());
+        List<Label> labels = createLabels(noteSaveDto.getLabels());
 
-        createNewNoteLabel(note, label);
+        createNewNoteLabels(note, labels);
 
-        return new NoteDetailsDTO(note.getId(), note.getTitle(), note.getContent(), label.getName());
+        return new NoteDetailsDTO(note.getId(), note.getTitle(), note.getContent(), labels);
 
     }
 
@@ -64,15 +63,27 @@ public class NoteTakingServiceImpl implements NoteTakingService {
      * Get all notes.
      */
     @Override
-    public List<NoteLabelId> getAllNotes() {
+    public List<NoteDetailsDTO> getAllNotes() {
         List<NoteLabel> allNotesWithLabel = noteLabelRepo.findAll();
-        List<NoteLabelId> result = new ArrayList<>();
+        List<NoteDetailsDTO> result = new ArrayList<>();
 
-        allNotesWithLabel.forEach((noteLabel) -> {
-            result.add(noteLabel.getId());
+        allNotesWithLabel.forEach((noteLabelObj) -> {
+            NoteLabelId noteLabel = noteLabelObj.getId();
+
+            // Get all the labels linked with the note
+            // TODO: Need to improve this logic as it is too complex.
+            List<NoteLabel> findByIdNote = noteLabelRepo.findByIdNote(noteLabel.getNote());
+            List<Label> labels = new ArrayList<>();
+            findByIdNote.forEach((l) -> {
+                labels.add(l.getId().getLabel());
+            });
+
+            result.add(new NoteDetailsDTO(noteLabel.getNote().getId(),
+                    noteLabel.getNote().getTitle(),
+                    noteLabel.getNote().getContent(), labels));
         });
 
-        return result;
+        return result.stream().distinct().collect(Collectors.toList());
     }
 
     /**
@@ -96,7 +107,7 @@ public class NoteTakingServiceImpl implements NoteTakingService {
         noteRepo.save(noteDetails);
 
         // If the label name is not provided
-        if (noteUpdateDTO.getLabelName().isEmpty()) {
+        if (noteUpdateDTO.getLabels().isEmpty()) {
             // If the note to be updated have a label linked to it - need to remove it
             List<NoteLabel> noteLabel = noteLabelRepo.findByIdNote(noteDetails);
             noteLabelRepo.deleteAll(noteLabel);
@@ -106,7 +117,7 @@ public class NoteTakingServiceImpl implements NoteTakingService {
         }
 
         // Update/Create Label
-        Label label = createLabel(noteUpdateDTO.getLabelName());
+        List<Label> labels = createLabels(noteUpdateDTO.getLabels());
 
         // Save link between label & note
         // If the note to be updated have a label linked to it - just update
@@ -115,21 +126,26 @@ public class NoteTakingServiceImpl implements NoteTakingService {
         // If the note label link is not found
         if (noteLabel.isEmpty()) {
             // Create new note label
-            createNewNoteLabel(noteDetails, label);
+            createNewNoteLabels(noteDetails, labels);
             return Optional.ofNullable(new NoteDetailsDTO(noteDetails.getId(), noteDetails.getTitle(),
-                    noteDetails.getContent(), label.getName()));
+                    noteDetails.getContent(), labels));
 
         } else {
             // Remove any other linked labels with the note
             noteLabelRepo.deleteAll(noteLabel);
             // Create the new label
-            createNewNoteLabel(noteDetails, label);
+            createNewNoteLabels(noteDetails, labels);
 
             return Optional.ofNullable(new NoteDetailsDTO(noteDetails.getId(), noteDetails.getTitle(),
-                    noteDetails.getContent(), label.getName()));
+                    noteDetails.getContent(), labels));
         }
     }
 
+    /**
+     * Delete a note.
+     * 
+     * We are making sure that there are no 'unused' labels.
+     */
     @Override
     public boolean deleteNote(int id) {
         Optional<Note> note = noteRepo.findById(id);
@@ -159,38 +175,12 @@ public class NoteTakingServiceImpl implements NoteTakingService {
         return true;
     }
 
+    /**
+     * Get a list of labels stored in the database
+     */
     @Override
     public List<Label> getAllLabels() {
         return labelRepo.findAll();
-    }
-
-    private Label createLabel(String labelName) {
-        Label label;
-
-        List<Label> labels = labelRepo.findByName(labelName);
-
-        // If the label already exists
-        if (!labels.isEmpty()) {
-            // Get the first one - assuming the label names are unique so the size of the
-            // list is going to always be one.
-            label = labels.get(0);
-        } else {
-            // Create new label
-            label = new Label(labelName);
-            labelRepo.save(label);
-        }
-
-        return label;
-    }
-
-    private void createNewNoteLabel(Note note, Label label) {
-        NoteLabelId noteLabelId = new NoteLabelId();
-        noteLabelId.setLabel(label);
-        noteLabelId.setNote(note);
-
-        NoteLabel newNoteLabel = new NoteLabel(noteLabelId);
-
-        noteLabelRepo.save(newNoteLabel);
     }
 
     /**
@@ -200,11 +190,12 @@ public class NoteTakingServiceImpl implements NoteTakingService {
      * Step 2: Search for the text in the labels
      * Step 3: Return one list that consolidates the result of Step 1 & Step 2
      * 
-     * NOTE: Two separate queries were implemented as a note does not necessarily have a label linked to it.
+     * NOTE: Two separate queries were implemented as a note does not necessarily
+     * have a label linked to it.
      */
     @Override
-    public List<NoteSearchDetailsDTO> filterNotes(String text) {
-        List<NoteSearchDetailsDTO> searchList = new ArrayList<>();
+    public List<NoteDetailsDTO> filterNotes(String text) {
+        List<NoteDetailsDTO> searchList = new ArrayList<>();
 
         // Step 1: Check if the text matches any content or title in the Note
         filterNotes(text, searchList);
@@ -213,45 +204,14 @@ public class NoteTakingServiceImpl implements NoteTakingService {
         filterLabels(text, searchList);
 
         // Remove any duplicate notes from the result of the 2 queries
-        List<NoteSearchDetailsDTO> searchResult = searchList.stream().distinct().collect(Collectors.toList());
+        List<NoteDetailsDTO> searchResult = searchList.stream().distinct().collect(Collectors.toList());
 
         return searchResult;
     }
 
-    private void filterLabels(String text, List<NoteSearchDetailsDTO> searchList) {
-        List<NoteLabel> filterLabels = noteLabelRepo.filterByLabelName(text);
-
-        filterLabels.forEach((noteLabel) -> {
-            NoteLabelId noteLabelId = noteLabel.getId();
-            searchList.add(new NoteSearchDetailsDTO(noteLabelId.getNote().getId(), noteLabelId.getNote().getTitle(),
-                    noteLabelId.getNote().getContent(), noteLabelId.getLabel().getName(),
-                    noteLabelId.getLabel().getId()));
-        });
-    }
-
-    private void filterNotes(String text, List<NoteSearchDetailsDTO> searchList) {
-        // Query all the notes that match with the filetered text
-        List<Note> filterNotes = noteRepo.filter(text);
-
-        // If exists, get the labels of the filtered notes
-        filterNotes.forEach((note) -> {
-            // Lookup note in notelabelrepo
-            List<NoteLabel> findByIdNoteId = noteLabelRepo.findByIdNote(note);
-
-            if (findByIdNoteId.isEmpty()) {
-                // Case: The note does not have a label assigned to it
-                searchList.add(new NoteSearchDetailsDTO(note.getId(), note.getTitle(), note.getContent()));
-
-            } else {
-                // TODO: Assuming we have one label assigned to note - this need to be updated
-                // to support sending Array of labels
-                NoteLabelId noteLabel = findByIdNoteId.get(0).getId();
-                searchList.add(new NoteSearchDetailsDTO(note.getId(), note.getTitle(), note.getContent(),
-                        noteLabel.getLabel().getName(), noteLabel.getLabel().getId()));
-            }
-        });
-    }
-
+    /**
+     * Logic to filter notes by labels
+     */
     @Override
     public List<NoteLabelId> filterLabels(LabelFilterDTO labelFilter) {
         List<NoteLabel> filterByLabelIds = noteLabelRepo.filterByLabelIds(labelFilter.getLabels());
@@ -262,4 +222,88 @@ public class NoteTakingServiceImpl implements NoteTakingService {
         });
         return result;
     }
+
+    private List<Label> createLabels(List<String> labelsList) {
+        List<Label> labelList = new ArrayList<>();
+
+        labelsList.forEach((label) -> {
+            List<Label> labels = labelRepo.findByName(label);
+
+            // If the label already exists
+            if (!labels.isEmpty()) {
+                labelList.addAll(labels);
+            } else {
+                // Create new label
+                Label labelCreated = new Label(label);
+                labelRepo.save(labelCreated);
+                labelList.add(labelCreated);
+            }
+        });
+
+        return labelList;
+    }
+
+    private void createNewNoteLabels(Note note, List<Label> labels) {
+        labels.forEach((label) -> {
+            NoteLabelId noteLabelId = new NoteLabelId();
+            noteLabelId.setLabel(label);
+            noteLabelId.setNote(note);
+
+            NoteLabel newNoteLabel = new NoteLabel(noteLabelId);
+
+            noteLabelRepo.save(newNoteLabel);
+        });
+    }
+
+    private void filterLabels(String text, List<NoteDetailsDTO> searchList) {
+        List<NoteLabel> filterLabels = noteLabelRepo.filterByLabelName(text);
+
+        filterLabels.forEach((note) -> {
+            List<NoteLabel> findByIdNoteId = noteLabelRepo.findByIdNote(note.getId().getNote());
+
+            if (!findByIdNoteId.isEmpty()) {
+                List<Label> labels = new ArrayList<>();
+
+                // TODO: Improve the logic for when we need to get all labels with note
+                findByIdNoteId.forEach((nl) -> {
+                    NoteLabelId noteLabel = nl.getId();
+                    labels.add(noteLabel.getLabel());
+
+                });
+
+                NoteLabelId noteLabelId = note.getId();
+                searchList.add(new NoteDetailsDTO(noteLabelId.getNote().getId(), noteLabelId.getNote().getTitle(),
+                        noteLabelId.getNote().getContent(), labels));
+            }
+        });
+    }
+
+    private void filterNotes(String text, List<NoteDetailsDTO> searchList) {
+        // Query all the notes that match with the filetered text
+        List<Note> filterNotes = noteRepo.filter(text);
+
+        // If exists, get the labels of the filtered notes
+        filterNotes.forEach((note) -> {
+            // Lookup note in notelabelrepo
+            List<NoteLabel> findByIdNoteId = noteLabelRepo.findByIdNote(note);
+
+            if (findByIdNoteId.isEmpty()) {
+                // Case: The note does not have a label assigned to it
+                searchList.add(new NoteDetailsDTO(note.getId(), note.getTitle(), note.getContent(), null));
+
+            } else {
+                List<Label> labels = new ArrayList<>();
+                findByIdNoteId.forEach((nl) -> {
+                    NoteLabelId noteLabel = nl.getId();
+                    labels.add(noteLabel.getLabel());
+
+                });
+
+                searchList.add(new NoteDetailsDTO(note.getId(), note.getTitle(), note.getContent(),
+                        labels));
+
+            }
+        });
+    }
+
 }

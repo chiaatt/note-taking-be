@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NoteLabelRepo extends JpaRepository<NoteLabel, NoteLabelId> {
      List<NoteLabel> findAll();
+
      List<NoteLabel> findByIdNote(Note note);
      List<NoteLabel> findByIdLabel(Label label);
 
