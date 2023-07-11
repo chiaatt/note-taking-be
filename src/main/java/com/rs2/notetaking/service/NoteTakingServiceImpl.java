@@ -158,7 +158,7 @@ public class NoteTakingServiceImpl implements NoteTakingService
         List<Label> labels = labelRepo.findByName(labelName);
 
         // If the label already exists
-        if (labels.size() > 0) {
+        if (!labels.isEmpty()) {
             // Get the first one - assuming the label names are unique so the size of the list is going to always be one.
             label = labels.get(0);
         }

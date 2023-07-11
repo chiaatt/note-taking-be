@@ -51,6 +51,5 @@ public class NoteTakingController {
     public void deleteNote(@PathVariable(value = "id") int id)
     {
         noteService.deleteNote(id);
-    }
-    
+    }   
 }
