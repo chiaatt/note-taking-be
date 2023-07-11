@@ -1,16 +1,15 @@
-#
-# Build stage
-#
-FROM maven:3.6.0-jdk-11-slim AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package
+FROM ubuntu:latest AS build
 
-#
-# Package stage
-#
-FROM openjdk:11-jre-slim
-COPY --from=build /home/app/target/note-taking-be-0.0.1.jar /usr/local/lib/note-taking-be.jar
-ENV PORT=8084
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
+COPY . .
+
+RUN ./gradlew bootJar --no-daemon
+
+FROM openjdk:17-jdk-slim
+
 EXPOSE 8084
-ENTRYPOINT ["java","-jar","/usr/local/lib/note-taking-be.jar"]
+
+COPY --from=build /build/libs/note-taking-be.jar note-taking-be.jar
+
+ENTRYPOINT ["java", "-jar", "note-taking-be.jar"]
