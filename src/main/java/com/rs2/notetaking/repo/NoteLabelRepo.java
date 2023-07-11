@@ -1,4 +1,5 @@
 package com.rs2.notetaking.repo;
+import com.rs2.notetaking.entity.Label;
 import com.rs2.notetaking.entity.Note;
 import com.rs2.notetaking.entity.NoteLabel;
 import com.rs2.notetaking.entity.NoteLabelId;
@@ -14,4 +15,5 @@ import org.springframework.stereotype.Repository;
 public interface NoteLabelRepo extends JpaRepository<NoteLabel, NoteLabelId> {
      List<NoteLabel> findAll();
      List<NoteLabel> findByIdNoteId(Note note);
+     List<NoteLabel> findByIdLabelId(Label label);
 }

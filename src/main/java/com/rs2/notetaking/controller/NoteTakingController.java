@@ -48,10 +48,9 @@ public class NoteTakingController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public String deleteNote(@PathVariable(value = "id") int id)
+    public void deleteNote(@PathVariable(value = "id") int id)
     {
-        boolean deleteNote = noteService.deleteNote(id);
-        return "deleted";
+        noteService.deleteNote(id);
     }
     
 }

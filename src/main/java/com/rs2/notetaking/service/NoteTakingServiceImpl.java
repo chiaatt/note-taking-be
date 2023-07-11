@@ -112,7 +112,9 @@ public class NoteTakingServiceImpl implements NoteTakingService
             return Optional.ofNullable(new NoteDetailsDTO(noteDetails.getId(), noteDetails.getTitle(), noteDetails.getContent(), label.getName()));
 
         } else {
+            // Remove any other linked labels with the note
             noteLabelRepo.deleteAll(noteLabel);
+            // Create the new label
             createNewNoteLabel(noteDetails, label);
 
             return Optional.ofNullable(new NoteDetailsDTO(noteDetails.getId(), noteDetails.getTitle(), noteDetails.getContent(), label.getName()));
@@ -122,17 +124,31 @@ public class NoteTakingServiceImpl implements NoteTakingService
 
     @Override
     public boolean deleteNote(int id) {
+        Optional<Note> note = noteRepo.findById(id);
  
-        // if(employeeRepo.existsById(id))
-        // {
-        //     employeeRepo.deleteById(id);
-        // }
-        // else
-        // {
-        //     System.out.println("Employee id not found");
-        // }
+        if (note.isPresent()) {
+            // Delete the link between label and note
+            List<NoteLabel> noteLabels = noteLabelRepo.findByIdNoteId(note.get());
+            noteLabelRepo.deleteAll(noteLabels);
+
+            // If label is not used anymore - delete it
+            noteLabels.forEach((noteLabelValue) -> {
+                Label label = noteLabelValue.getId().getLabelId();
+                List<NoteLabel> linkedLabel = noteLabelRepo.findByIdLabelId(label);
+
+                if (linkedLabel.isEmpty()) {
+                    labelRepo.delete(noteLabelValue.getId().getLabelId());
+                }
+            });
+
+            // Delete note
+            noteRepo.deleteById(id);
+        }
+        else {
+            //TODO: Throw exceptions to be handled better
+            System.out.println("Note id not found");
+        }
  
-        // return true;
         return true;
     }
 
