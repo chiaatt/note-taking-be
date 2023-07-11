@@ -23,6 +23,8 @@ import com.rs2.notetaking.entity.Label;
 import com.rs2.notetaking.entity.NoteLabelId;
 import com.rs2.notetaking.service.NoteTakingService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @CrossOrigin
 @RequestMapping("api/v1/note")
@@ -31,7 +33,7 @@ public class NoteTakingController {
     private NoteTakingService noteService;
 
     @PostMapping()
-    public NoteDetailsDTO saveNote(@RequestBody NoteSaveDTO noteSaveDto) {
+    public NoteDetailsDTO saveNote(@RequestBody @Valid NoteSaveDTO noteSaveDto) {
         return noteService.addNote(noteSaveDto);
     }
 
@@ -41,7 +43,7 @@ public class NoteTakingController {
     }
 
     @PutMapping()
-    public Optional<NoteDetailsDTO> updateNote(@RequestBody NoteUpdateDTO noteUpdateDTO) {
+    public Optional<NoteDetailsDTO> updateNote(@RequestBody @Valid NoteUpdateDTO noteUpdateDTO) {
         return noteService.updateNote(noteUpdateDTO);
     }
 
@@ -51,12 +53,12 @@ public class NoteTakingController {
     }
 
     @PostMapping("/search")
-    public List<NoteDetailsDTO> search(@RequestBody SearchDTO search) {
+    public List<NoteDetailsDTO> search(@RequestBody @Valid SearchDTO search) {
         return noteService.filterNotes(search.getText().toLowerCase());
     }
 
     @PostMapping("/filter")
-    public List<NoteLabelId> labelFilter(@RequestBody LabelFilterDTO labelFilter) {
+    public List<NoteLabelId> labelFilter(@RequestBody @Valid LabelFilterDTO labelFilter) {
         return noteService.filterLabels(labelFilter);
     }
  
