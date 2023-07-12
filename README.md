@@ -24,7 +24,7 @@ This endpoint is used to register a new user: `POST /api/v1/auth/register`
 
 ### User Login
 This endpoint is used to authenticate a user: `POST /api/v1/auth/login`
-Authentication is implemented using JWT authentication with Spring Security.
+Authentication is implemented using JWT authentication with Spring Security. On the front-end application, the auth token will be stored in local storage to be used to verify if the user is authenticated.
 
 ![image](https://github.com/chiaatt/note-taking-be/assets/8133444/90b6661f-dd2d-4976-ba60-57ac175001c8)
 
