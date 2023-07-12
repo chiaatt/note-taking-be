@@ -1,7 +1,7 @@
-package com.rs2.notetaking.repo;
-import com.rs2.notetaking.entity.Label;
+package com.rs2.notetaking.repository;
+import com.rs2.notetaking.entity.User;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @EnableJpaRepositories
 @Repository
-public interface LabelRepo extends JpaRepository<Label, Long> {
+public interface UserRepo extends JpaRepository<User, Long> {
 
-    List<Label> findByName(String name);
+  Optional<User> findByLogin(String login);
 }

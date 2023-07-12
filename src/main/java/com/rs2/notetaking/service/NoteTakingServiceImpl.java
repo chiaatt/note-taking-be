@@ -8,9 +8,11 @@ import com.rs2.notetaking.entity.Label;
 import com.rs2.notetaking.entity.Note;
 import com.rs2.notetaking.entity.NoteLabel;
 import com.rs2.notetaking.entity.NoteLabelId;
-import com.rs2.notetaking.repo.LabelRepo;
-import com.rs2.notetaking.repo.NoteLabelRepo;
-import com.rs2.notetaking.repo.NoteRepo;
+import com.rs2.notetaking.repository.LabelRepo;
+import com.rs2.notetaking.repository.NoteLabelRepo;
+import com.rs2.notetaking.repository.NoteRepo;
+
+import exceptions.AppException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -64,14 +67,16 @@ public class NoteTakingServiceImpl implements NoteTakingService {
      */
     @Override
     public List<NoteDetailsDTO> getAllNotes() {
+        // Get all notes
         List<NoteLabel> allNotesWithLabel = noteLabelRepo.findAll();
+
         List<NoteDetailsDTO> result = new ArrayList<>();
 
         allNotesWithLabel.forEach((noteLabelObj) -> {
             NoteLabelId noteLabel = noteLabelObj.getId();
 
             // Get all the labels linked with the note
-            // TODO: Need to improve this logic as it is too complex.
+            // TODO: Need to improve this logic.
             List<NoteLabel> findByIdNote = noteLabelRepo.findByIdNote(noteLabel.getNote());
             List<Label> labels = new ArrayList<>();
             findByIdNote.forEach((l) -> {
@@ -95,9 +100,8 @@ public class NoteTakingServiceImpl implements NoteTakingService {
         Optional<Note> note = noteRepo.findById(noteUpdateDTO.getNoteId());
 
         if (!note.isPresent()) {
-            // TODO: Return exception to notify the consumer of the API that the note id is
-            // invalid.
-            return null;
+            throw new AppException("Note with id [" + noteUpdateDTO.getNoteId() + "] does not exist",
+                    HttpStatus.BAD_REQUEST);
         }
 
         // Update Note
@@ -150,27 +154,26 @@ public class NoteTakingServiceImpl implements NoteTakingService {
     public boolean deleteNote(Long id) {
         Optional<Note> note = noteRepo.findById(id);
 
-        if (note.isPresent()) {
-            // Delete the link between label and note
-            List<NoteLabel> noteLabels = noteLabelRepo.findByIdNote(note.get());
-            noteLabelRepo.deleteAll(noteLabels);
-
-            // If label is not used anymore - delete it
-            noteLabels.forEach((noteLabelValue) -> {
-                Label label = noteLabelValue.getId().getLabel();
-                List<NoteLabel> linkedLabel = noteLabelRepo.findByIdLabel(label);
-
-                if (linkedLabel.isEmpty()) {
-                    labelRepo.delete(noteLabelValue.getId().getLabel());
-                }
-            });
-
-            // Delete note
-            noteRepo.deleteById(id);
-        } else {
-            // TODO: Throw exceptions to be handled better
-            System.out.println("Note id not found");
+        if (!note.isPresent()) {
+            throw new AppException("Note with id [" + id + "] does not exist",
+                    HttpStatus.BAD_REQUEST);
         }
+        // Delete the link between label and note
+        List<NoteLabel> noteLabels = noteLabelRepo.findByIdNote(note.get());
+        noteLabelRepo.deleteAll(noteLabels);
+
+        // If label is not used anymore - delete it
+        noteLabels.forEach((noteLabelValue) -> {
+            Label label = noteLabelValue.getId().getLabel();
+            List<NoteLabel> linkedLabel = noteLabelRepo.findByIdLabel(label);
+
+            if (linkedLabel.isEmpty()) {
+                labelRepo.delete(noteLabelValue.getId().getLabel());
+            }
+        });
+
+        // Delete note
+        noteRepo.deleteById(id);
 
         return true;
     }
@@ -284,14 +287,15 @@ public class NoteTakingServiceImpl implements NoteTakingService {
 
         // If exists, get the labels of the filtered notes
         filterNotes.forEach((note) -> {
-            // Lookup note in notelabelrepo
+            // Lookup note
             List<NoteLabel> findByIdNoteId = noteLabelRepo.findByIdNote(note);
 
             if (findByIdNoteId.isEmpty()) {
                 // Case: The note does not have a label assigned to it
                 searchList.add(new NoteDetailsDTO(note.getId(), note.getTitle(), note.getContent(), null));
 
-            } else {
+            } else { 
+                 // Case: The note have a label assigned to it
                 List<Label> labels = new ArrayList<>();
                 findByIdNoteId.forEach((nl) -> {
                     NoteLabelId noteLabel = nl.getId();

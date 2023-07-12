@@ -1,4 +1,4 @@
-package com.rs2.notetaking.repo;
+package com.rs2.notetaking.repository;
 
 import com.rs2.notetaking.entity.Note;
 
