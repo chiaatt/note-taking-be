@@ -28,7 +28,7 @@ Authentication is implemented using JWT authentication with Spring Security.
 
 ![image](https://github.com/chiaatt/note-taking-be/assets/8133444/90b6661f-dd2d-4976-ba60-57ac175001c8)
 
-####User with login: testUser1 and password: Password123! was already created for testing
+#### User with login: testUser1 and password: Password123! was already created for testing
 
 ### Create Note (Authenticated)
 This endpoint is used to create a new note: `POST /api/v1/note`
