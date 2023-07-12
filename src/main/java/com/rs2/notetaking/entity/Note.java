@@ -1,5 +1,7 @@
 package com.rs2.notetaking.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.Data;
 

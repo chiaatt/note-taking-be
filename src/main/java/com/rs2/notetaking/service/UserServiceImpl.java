@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.rs2.notetaking.config.UserDTO;
 import com.rs2.notetaking.dto.CredentialsDTO;
 import com.rs2.notetaking.dto.SignUpDTO;
+import com.rs2.notetaking.dto.UserDTO;
 import com.rs2.notetaking.entity.User;
 import com.rs2.notetaking.mappers.UserMapper;
 import com.rs2.notetaking.repository.UserRepo;

@@ -1,4 +1,4 @@
-package com.rs2.notetaking.config;
+package com.rs2.notetaking.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

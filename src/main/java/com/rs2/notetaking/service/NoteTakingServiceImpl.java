@@ -67,28 +67,33 @@ public class NoteTakingServiceImpl implements NoteTakingService {
      */
     @Override
     public List<NoteDetailsDTO> getAllNotes() {
-        // Get all notes
-        List<NoteLabel> allNotesWithLabel = noteLabelRepo.findAll();
-
         List<NoteDetailsDTO> result = new ArrayList<>();
 
-        allNotesWithLabel.forEach((noteLabelObj) -> {
-            NoteLabelId noteLabel = noteLabelObj.getId();
+        // Get all notes
+        List<Note> allNotes = noteRepo.findAll();
 
-            // Get all the labels linked with the note
-            // TODO: Need to improve this logic.
-            List<NoteLabel> findByIdNote = noteLabelRepo.findByIdNote(noteLabel.getNote());
-            List<Label> labels = new ArrayList<>();
-            findByIdNote.forEach((l) -> {
-                labels.add(l.getId().getLabel());
-            });
+        allNotes.forEach((note) -> {
+            List<NoteLabel> findByIdNoteId = noteLabelRepo.findByIdNote(note);
 
-            result.add(new NoteDetailsDTO(noteLabel.getNote().getId(),
-                    noteLabel.getNote().getTitle(),
-                    noteLabel.getNote().getContent(), labels));
+            if (findByIdNoteId.isEmpty()) {
+                result.add(new NoteDetailsDTO(note.getId(), note.getTitle(),
+                        note.getContent(), null));
+            } else {
+                List<Label> labels = new ArrayList<>();
+
+                // TODO: Improve the logic for when we need to get all labels with note
+                findByIdNoteId.forEach((nl) -> {
+                    NoteLabelId noteLabel = nl.getId();
+                    labels.add(noteLabel.getLabel());
+
+                });
+
+                result.add(new NoteDetailsDTO(note.getId(), note.getTitle(),
+                        note.getContent(), labels));
+            }
         });
 
-        return result.stream().distinct().collect(Collectors.toList());
+        return result;
     }
 
     /**
@@ -294,8 +299,8 @@ public class NoteTakingServiceImpl implements NoteTakingService {
                 // Case: The note does not have a label assigned to it
                 searchList.add(new NoteDetailsDTO(note.getId(), note.getTitle(), note.getContent(), null));
 
-            } else { 
-                 // Case: The note have a label assigned to it
+            } else {
+                // Case: The note have a label assigned to it
                 List<Label> labels = new ArrayList<>();
                 findByIdNoteId.forEach((nl) -> {
                     NoteLabelId noteLabel = nl.getId();

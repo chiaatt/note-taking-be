@@ -23,7 +23,7 @@ public interface NoteLabelRepo extends JpaRepository<NoteLabel, NoteLabelId> {
     @Query(value = "SELECT nl.* FROM \"note-label\" nl INNER JOIN label n on nl.labelid = n.id WHERE lower(n.name) LIKE %?1%", nativeQuery = true)
     List<NoteLabel> filterByLabelName(String filter);
 
-    // // In this case we want the notes that have the particular label ids
+    // In this case we want the notes that have the particular label ids
     @Query(value = "SELECT nl.* FROM \"note-label\" nl INNER JOIN label n on nl.labelid = n.id WHERE n.id IN (?1)", nativeQuery = true)
     List<NoteLabel> filterByLabelIds(List<Integer> ids);
 }

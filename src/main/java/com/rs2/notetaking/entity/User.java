@@ -1,7 +1,5 @@
 package com.rs2.notetaking.entity;
 
-import java.io.Serializable;
-
 import jakarta.persistence.*;
 import lombok.Data;
 import jakarta.validation.constraints.Size;

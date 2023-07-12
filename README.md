@@ -77,6 +77,7 @@ This endpoint is used to allow the users to retrieve only those notes that have 
 
 # Improvements
 - Link the notes with the users
+- Increase validations on the endpoints
 
 
 

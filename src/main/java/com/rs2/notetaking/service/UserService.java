@@ -1,8 +1,8 @@
 package com.rs2.notetaking.service;
 
-import com.rs2.notetaking.config.UserDTO;
 import com.rs2.notetaking.dto.CredentialsDTO;
 import com.rs2.notetaking.dto.SignUpDTO;
+import com.rs2.notetaking.dto.UserDTO;
 
 public interface UserService {
 

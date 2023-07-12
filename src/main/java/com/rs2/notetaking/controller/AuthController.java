@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs2.notetaking.config.UserAuthenticationProvider;
-import com.rs2.notetaking.config.UserDTO;
 import com.rs2.notetaking.dto.CredentialsDTO;
 import com.rs2.notetaking.dto.SignUpDTO;
+import com.rs2.notetaking.dto.UserDTO;
 import com.rs2.notetaking.service.UserService;
 
 import java.net.URI;
