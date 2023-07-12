@@ -29,37 +29,49 @@ Authentication is implemented using JWT authentication with Spring Security.
 ![image](https://github.com/chiaatt/note-taking-be/assets/8133444/90b6661f-dd2d-4976-ba60-57ac175001c8)
 
 
-### Create Note
+### Create Note (Authenticated)
 This endpoint is used to create a new note: `POST /api/v1/note`
 A note may contain no or many labels.
+
+*Please note that the Bearer token must be provided in the Authentication header. This token can be retrieved from the User Login endpoint.*
 
 ![image](https://github.com/chiaatt/note-taking-be/assets/8133444/4c18d532-e5a9-4006-b7b1-21b2592d62e1)
 
 
-### Update Note
+### Update Note (Authenticated)
 This endpoint is used to update a note: `PATCH /api/v1/note`
+
+*Please note that the Bearer token must be provided in the Authentication header. This token can be retrieved from the User Login endpoint.*
 
 ![image](https://github.com/chiaatt/note-taking-be/assets/8133444/a21c6e3c-4974-4a01-a90e-0b5e5f75f590)
 
 
-### Delete Note
+### Delete Note (Authenticated)
 This endpoint is used to delete a note: `DELETE /api/v1/note/{:id}`
 Any 'unused' labels are deleted as well to keep the data clean.
 
+*Please note that the Bearer token must be provided in the Authentication header. This token can be retrieved from the User Login endpoint.*
+
 ![image](https://github.com/chiaatt/note-taking-be/assets/8133444/ea12757b-a968-4690-9eca-643c624b5d21)
 
-### Get All Notes
+### Get All Notes (Authenticated)
 This endpoint is used to get a list of all notes: `GET /api/v1/note`
+
+*Please note that the Bearer token must be provided in the Authentication header. This token can be retrieved from the User Login endpoint.*
 
 ![image](https://github.com/chiaatt/note-taking-be/assets/8133444/768811b1-854c-402b-89ce-598016dd45b3)
 
-### Filter (Search)
+### Filter (Search) (Authenticated)
 This endpoint is used to allow the users to search for a particular note or label. The text search is used to match either title, note content, or label: `POST /api/v1/note/search`
+
+*Please note that the Bearer token must be provided in the Authentication header. This token can be retrieved from the User Login endpoint.*
 
 ![image](https://github.com/chiaatt/note-taking-be/assets/8133444/0158dddf-d4dd-4c9f-bde7-003ff527ce2e)
 
-### Labels Quick Access (Get Notes by Label)
+### Labels Quick Access (Get Notes by Label) (Authenticated)
 This endpoint is used to allow the users to retrieve only those notes that have a particular label: `POST /api/v1/note/filter`
+
+*Please note that the Bearer token must be provided in the Authentication header. This token can be retrieved from the User Login endpoint.*
 
 ![image](https://github.com/chiaatt/note-taking-be/assets/8133444/2c192c43-29ca-4ce9-9685-f5828b7713be)
 
