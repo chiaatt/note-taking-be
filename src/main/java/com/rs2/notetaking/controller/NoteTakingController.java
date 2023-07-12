@@ -58,7 +58,7 @@ public class NoteTakingController {
     }
 
     @PostMapping("/filter")
-    public List<NoteLabelId> labelFilter(@RequestBody @Valid LabelFilterDTO labelFilter) {
+    public List<NoteDetailsDTO> labelFilter(@RequestBody @Valid LabelFilterDTO labelFilter) {
         return noteService.filterLabels(labelFilter);
     }
  

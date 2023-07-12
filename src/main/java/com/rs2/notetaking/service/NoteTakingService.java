@@ -22,7 +22,7 @@ public interface NoteTakingService {
     // Ideally implement this in the Label Service
     List<Label> getAllLabels();
 
-    List<NoteLabelId> filterLabels(LabelFilterDTO labelFilter);
+    List<NoteDetailsDTO> filterLabels(LabelFilterDTO labelFilter);
 
     List<NoteDetailsDTO> filterNotes(String filter);
 }

@@ -80,7 +80,7 @@ public class NoteTakingServiceImpl implements NoteTakingService {
                 // If the note has no label
                 result.add(new NoteDetailsDTO(note.getId(), note.getTitle(),
                         note.getContent(), null));
-                        
+
             } else {
                 List<Label> labels = new ArrayList<>();
 
@@ -223,13 +223,38 @@ public class NoteTakingServiceImpl implements NoteTakingService {
      * Logic to filter notes by labels
      */
     @Override
-    public List<NoteLabelId> filterLabels(LabelFilterDTO labelFilter) {
+    public List<NoteDetailsDTO> filterLabels(LabelFilterDTO labelFilter) {
         List<NoteLabel> filterByLabelIds = noteLabelRepo.filterByLabelIds(labelFilter.getLabels());
-        List<NoteLabelId> result = new ArrayList<>();
+        List<NoteDetailsDTO> result = new ArrayList<>();
+
+        if (filterByLabelIds.isEmpty()) {
+            return result;
+        }
 
         filterByLabelIds.forEach((noteLabel) -> {
-            result.add(noteLabel.getId());
+            Note note = noteLabel.getId().getNote();
+            List<NoteLabel> findByIdNoteId = noteLabelRepo.findByIdNote(note);
+
+            if (findByIdNoteId.isEmpty()) {
+
+                // If the note has no label
+                result.add(new NoteDetailsDTO(note.getId(), note.getTitle(),
+                        note.getContent(), null));
+
+            } else {
+                List<Label> labels = new ArrayList<>();
+
+                findByIdNoteId.forEach((nl) -> {
+                    NoteLabelId noteLabelDetails = nl.getId();
+                    labels.add(noteLabelDetails.getLabel());
+
+                });
+
+                result.add(new NoteDetailsDTO(note.getId(), note.getTitle(),
+                        note.getContent(), labels));
+            }
         });
+           
         return result;
     }
 
