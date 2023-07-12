@@ -9,7 +9,7 @@ import lombok.Data;
 public class Label {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
  
     @Column(name = "name", length = 32, nullable = false)
