@@ -76,12 +76,14 @@ public class NoteTakingServiceImpl implements NoteTakingService {
             List<NoteLabel> findByIdNoteId = noteLabelRepo.findByIdNote(note);
 
             if (findByIdNoteId.isEmpty()) {
+
+                // If the note has no label
                 result.add(new NoteDetailsDTO(note.getId(), note.getTitle(),
                         note.getContent(), null));
+                        
             } else {
                 List<Label> labels = new ArrayList<>();
 
-                // TODO: Improve the logic for when we need to get all labels with note
                 findByIdNoteId.forEach((nl) -> {
                     NoteLabelId noteLabel = nl.getId();
                     labels.add(noteLabel.getLabel());
