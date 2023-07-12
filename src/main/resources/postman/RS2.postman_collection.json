@@ -1,0 +1,292 @@
+{
+	"info": {
+		"_postman_id": "bb38b1a8-da71-4c83-b5f4-e862f7a5ddd0",
+		"name": "RS2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "952531"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Multiple Label Note\",\r\n    \"content\": \"This is a multiple label note\",\r\n    \"labels\": [\"LabelA\", \"LabelB\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://note-taking-be.onrender.com/api/v1/note",
+					"protocol": "https",
+					"host": [
+						"note-taking-be",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"noteId\": 1403,\r\n    \"title\": \"Update Multiple Label Note\",\r\n    \"content\": \"This is a multiple label note\",\r\n    \"labels\": [\"LabelA\", \"LabelB\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://note-taking-be.onrender.com/api/v1/note",
+					"protocol": "https",
+					"host": [
+						"note-taking-be",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://note-taking-be.onrender.com/api/v1/note/1452",
+					"protocol": "https",
+					"host": [
+						"note-taking-be",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"1452"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Notes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Title test 2\",\r\n    \"content\": \"Test content 2\",\r\n    \"labelName\": \"label3\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://note-taking-be.onrender.com/api/v1/note",
+					"protocol": "https",
+					"host": [
+						"note-taking-be",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Labels",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Title test 2\",\r\n    \"content\": \"Test content 2\",\r\n    \"labelName\": \"label3\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://note-taking-be.onrender.com/api/v1/note/label",
+					"protocol": "https",
+					"host": [
+						"note-taking-be",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Notes By Label",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"labels\": [\r\n       1403\r\n   ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://note-taking-be.onrender.com/api/v1/note/filter",
+					"protocol": "https",
+					"host": [
+						"note-taking-be",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"filter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"lab\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://note-taking-be.onrender.com/api/v1/note/search",
+					"protocol": "https",
+					"host": [
+						"note-taking-be",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registration",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Mary\",\r\n    \"surname\": \"Doe\",\r\n    \"login\": \"testUser3\",\r\n    \"password\": \"Password123!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://note-taking-be.onrender.com/api/v1/auth/register",
+					"protocol": "https",
+					"host": [
+						"note-taking-be",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\": \"testUser2\",\r\n    \"password\": \"Password123!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://note-taking-be.onrender.com/api/v1/auth/login",
+					"protocol": "https",
+					"host": [
+						"note-taking-be",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
