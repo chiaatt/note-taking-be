@@ -9,11 +9,21 @@
 		{
 			"name": "Create",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ0ZXN0VXNlcjIiLCJleHAiOjE2ODkxNTMxMzAsImlhdCI6MTY4OTE0OTUzMH0.Sgv1J5sht9OTCKXDbOtXwtmSjpMnvqHjFEnv-nHWcDM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"Multiple Label Note\",\r\n    \"content\": \"This is a multiple label note\",\r\n    \"labels\": [\"LabelA\", \"LabelB\"]\r\n}",
+					"raw": "{\r\n    \"title\": \"Demo Note\",\r\n    \"content\": \"This is a demo note\",\r\n    \"labels\": [\"LabelA\", \"LabelB\"]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -40,6 +50,16 @@
 		{
 			"name": "Update",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ0ZXN0VXNlcjIiLCJleHAiOjE2ODkxNTMxMzAsImlhdCI6MTY4OTE0OTUzMH0.Sgv1J5sht9OTCKXDbOtXwtmSjpMnvqHjFEnv-nHWcDM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -71,6 +91,16 @@
 		{
 			"name": "Delete",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ0ZXN0VXNlcjIiLCJleHAiOjE2ODkxNTMxMzAsImlhdCI6MTY4OTE0OTUzMH0.Sgv1J5sht9OTCKXDbOtXwtmSjpMnvqHjFEnv-nHWcDM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
@@ -97,6 +127,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ0ZXN0VXNlcjIiLCJleHAiOjE2ODkxNTMxMzAsImlhdCI6MTY4OTE0OTUzMH0.Sgv1J5sht9OTCKXDbOtXwtmSjpMnvqHjFEnv-nHWcDM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -131,6 +171,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ0ZXN0VXNlcjIiLCJleHAiOjE2ODkxNTMxMzAsImlhdCI6MTY4OTE0OTUzMH0.Sgv1J5sht9OTCKXDbOtXwtmSjpMnvqHjFEnv-nHWcDM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -163,6 +213,16 @@
 		{
 			"name": "Get Notes By Label",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ0ZXN0VXNlcjIiLCJleHAiOjE2ODkxNTMxMzAsImlhdCI6MTY4OTE0OTUzMH0.Sgv1J5sht9OTCKXDbOtXwtmSjpMnvqHjFEnv-nHWcDM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -195,6 +255,16 @@
 		{
 			"name": "Search",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ0ZXN0VXNlcjIiLCJleHAiOjE2ODkxNTMxMzAsImlhdCI6MTY4OTE0OTUzMH0.Sgv1J5sht9OTCKXDbOtXwtmSjpMnvqHjFEnv-nHWcDM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
