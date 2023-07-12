@@ -10,7 +10,7 @@ public class Note {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "title", length = 32, nullable = false)
     private String title;
@@ -26,7 +26,7 @@ public class Note {
     public Note() {
     }
 
-    public Note(int id, String title, String content) {
+    public Note(Long id, String title, String content) {
         this.id = id;
         this.title = title;
         this.content = content;

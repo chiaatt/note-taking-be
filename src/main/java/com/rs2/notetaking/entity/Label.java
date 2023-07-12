@@ -10,7 +10,7 @@ public class Label {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
  
     @Column(name = "name", length = 32, nullable = false)
     private String name;

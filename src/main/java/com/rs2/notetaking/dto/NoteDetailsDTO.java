@@ -9,12 +9,12 @@ import lombok.Data;
 @Data
 public class NoteDetailsDTO {
 
-    private int noteId;
+    private Long noteId;
     private String title;
     private String content;
     public List<Label> labels;
 
-    public NoteDetailsDTO(int noteId, String title, String content, List<Label> labels) {
+    public NoteDetailsDTO(Long noteId, String title, String content, List<Label> labels) {
         this.noteId = noteId;
         this.title = title;
         this.content = content;

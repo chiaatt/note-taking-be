@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @EnableJpaRepositories
 @Repository
-public interface UserRepo extends JpaRepository<User,Integer> {
-  Optional<User> findByUsername(String username);
+public interface UserRepo extends JpaRepository<User, Long> {
+
+  Optional<User> findByLogin(String login);
 }

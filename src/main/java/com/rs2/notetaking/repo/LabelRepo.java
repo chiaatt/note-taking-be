@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @EnableJpaRepositories
 @Repository
-public interface LabelRepo extends JpaRepository<Label,Integer> {
+public interface LabelRepo extends JpaRepository<Label, Long> {
 
     List<Label> findByName(String name);
 }

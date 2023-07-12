@@ -19,7 +19,7 @@ public class SignUpDTO {
     private String lastName;
 
     @NotEmpty
-    private String username;
+    private String login;
 
     @NotEmpty
     private char[] password;

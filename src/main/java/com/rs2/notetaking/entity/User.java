@@ -1,5 +1,7 @@
 package com.rs2.notetaking.entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import jakarta.validation.constraints.Size;
@@ -12,27 +14,24 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Data
-@Table(name = "user")
-public class User {
+@Table(name="\"user\"")
+public class User implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    @Column(name = "id", unique=true, nullable=false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(length = 32, nullable = false)
+    @Column(name = "name", length = 32, nullable = false)
     private String name;
 
-    @Column(length = 32, nullable = false)
+    @Column(name = "surname", length = 32, nullable = false)
     private String surname;
 
-    @Column(nullable = false)
+    @Column(name = "login", nullable = false)
     @Size(max = 100)
-    private String username;
+    private String login;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     @Size(max = 100)
     private String password;
-
-    public int getId() {
-        return this.id;
-    }
 }

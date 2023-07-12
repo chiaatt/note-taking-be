@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @EnableJpaRepositories
 @Repository
-public interface NoteRepo extends JpaRepository<Note, Integer> {
+public interface NoteRepo extends JpaRepository<Note, Long> {
 
     @Query(value = "SELECT * FROM note n  WHERE lower(n.title) LIKE %?1% OR lower(n.content) LIKE %?1%", nativeQuery = true)
     List<Note> filter (String filter);

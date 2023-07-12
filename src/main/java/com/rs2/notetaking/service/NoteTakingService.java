@@ -17,7 +17,7 @@ public interface NoteTakingService {
  
     Optional<NoteDetailsDTO> updateNote(NoteUpdateDTO noteUpdateDto);
  
-    boolean deleteNote(int id);
+    boolean deleteNote(Long id);
 
     // Ideally implement this in the Label Service
     List<Label> getAllLabels();

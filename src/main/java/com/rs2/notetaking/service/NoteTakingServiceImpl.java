@@ -147,7 +147,7 @@ public class NoteTakingServiceImpl implements NoteTakingService {
      * We are making sure that there are no 'unused' labels.
      */
     @Override
-    public boolean deleteNote(int id) {
+    public boolean deleteNote(Long id) {
         Optional<Note> note = noteRepo.findById(id);
 
         if (note.isPresent()) {
