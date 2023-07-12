@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @Table(name="\"user\"")
-public class User implements Serializable {
+public class User {
     @Id
-    @Column(name = "id", unique=true, nullable=false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "name", length = 32, nullable = false)
